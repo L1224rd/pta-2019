@@ -1,38 +1,36 @@
-const title = document.querySelector('h1');
-const divMain = document.querySelector('#main');
-
 const gel = (selector) => {
   return document.querySelector(selector);
 }
 
-window.add = () => {
-  console.log('yay');
-  gel('body').innerHTML += `
-    <p>${gel('#main-input').value}</p>
-  `;
+let id = 0;
+
+let items = [];
+
+const populate = () => {
+  console.log(items);
+  gel('#items').innerHTML = '';
+  items.forEach((item) => {
+    gel('#items').innerHTML += `
+      <p>${item.value} - <span onclick="window.edit(${item.id},'${item.value}')">✎</span> - <span onclick="window.delete(${item.id})">🗑</span></p>
+    `;
+  });
 }
 
-divMain.style.backgroundColor = 'red';
-divMain.style.height = '100px';
+window.add = () => {
+  id++;
+  items.push({
+    id,
+    value: gel('#main-input').value,
+  });
+  populate();
+}
 
+window.delete = (id) => {
+  items = items.filter(item => item.id !== id);
+  populate();
+}
 
-// document.querySelector('#main-input').addEventListener('keypress', () => {
-//   title.innerHTML = document.querySelector('#main-input').value;
-// });
-
-
-
-
-// const down = (i = 0) => {
-//   divMain.style.height = `${i}px`;
-//   setTimeout(() => {
-//     down(i + 1);
-//   }, 50);
-// }
-
-// down(100);
-
-// setInterval(() => {
-//   i++;
-//   title.innerHTML = i;
-// }, 100);
+window.edit = (id, value) => {
+  window.delete(id);
+  gel('#main-input').value = value;
+}
